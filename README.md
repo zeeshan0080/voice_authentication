@@ -2,6 +2,8 @@
 
 Voice authentication using audio event classifier(YAMNET)
 
+Not spending much time on UI so minimal UI, focusing on the model and voice enrollment integration.
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
