@@ -22,8 +22,8 @@ class _LoginViewState extends State<LoginView> {
       ///
       await showGeneralDialog(
         context: context,
-        barrierLabel: 'notice',
-        barrierDismissible: true,
+        barrierLabel: 'enroll notice',
+        barrierDismissible: false,
         pageBuilder: (_, __, ___){
           return GeneralPopup(
             title: 'Voice Enroll',
@@ -37,6 +37,17 @@ class _LoginViewState extends State<LoginView> {
         }
       );
     }
+  }
+
+  _commenceLoginVerification() async {
+    await showGeneralDialog(
+    context: context,
+    barrierLabel: 'enroll notice',
+    barrierDismissible: false,
+    pageBuilder: (_, __, ___){
+      return const AuthenticationPopup();
+    }
+    );
   }
 
   @override

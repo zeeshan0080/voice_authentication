@@ -5,81 +5,199 @@ class GeneralPopup extends StatelessWidget {
   final String description;
   final String buttonText;
   final VoidCallback onTap;
-  const GeneralPopup({super.key, required this.title, required this.description, required this.buttonText, required this.onTap});
+  final bool canPop;
+  const GeneralPopup({super.key, required this.title, required this.description, required this.buttonText, required this.onTap, this.canPop=true});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Wrap(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                      decoration: TextDecoration.none,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    child: Text(
-                      description,
-                      textAlign: TextAlign.center,
+    return PopScope(
+      canPop: canPop,
+      child: Center(
+        child: Wrap(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
                       style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
-                          decoration: TextDecoration.none,
-                          fontWeight: FontWeight.w400
+                        fontSize: 20,
+                        color: Colors.black,
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            backgroundColor: Theme.of(context).primaryColor,
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    color: Theme.of(context).primaryColor,
-                                    width: 2),
-                                borderRadius: BorderRadius.circular(5)),
-                          ),
-                          onPressed: ()=> onTap(),
-                          child: Text(
-                            buttonText,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      child: Text(
+                        description,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            decoration: TextDecoration.none,
+                            fontWeight: FontWeight.w400
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              backgroundColor: Theme.of(context).primaryColor,
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      color: Theme.of(context).primaryColor,
+                                      width: 2),
+                                  borderRadius: BorderRadius.circular(5)),
+                            ),
+                            onPressed: ()=> onTap(),
+                            child: Text(
+                              buttonText,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 0),
-                ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 0),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
+
+class AuthenticationPopup extends StatefulWidget {
+  const AuthenticationPopup({super.key});
+
+  @override
+  State<AuthenticationPopup> createState() => _AuthenticationPopupState();
+}
+
+class _AuthenticationPopupState extends State<AuthenticationPopup> {
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      child: Center(
+        child: Wrap(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Voice Authentication',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      child: Text(
+                        'Authenticate your voice to continue',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            decoration: TextDecoration.none,
+                            fontWeight: FontWeight.w400
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: Colors.black, width: 2),
+                              borderRadius: BorderRadius.circular(200)
+                          ),
+                          child: const Center(
+                            child: Icon(Icons.mic, size: 40, color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Tap to start',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.w400
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: (){
+                            ///logout user
+                            ///
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Login again',
+                            style: TextStyle(
+                              color: Colors.red
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
