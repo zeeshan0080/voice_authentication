@@ -17,9 +17,6 @@ class _SplashViewState extends State<SplashView> {
   }
 
   proceed(){
-    ///If user already logged in, start voice auth process
-    ///
-
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> const LoginView()));
   }
 

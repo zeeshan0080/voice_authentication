@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../app_providers/authentication_provider.dart';
+import '../dependency_inject.dart';
 import 'voice_enroll_view.dart';
 import 'widgets/popups.dart';
 
@@ -12,6 +14,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  final _authProvider = sl<AuthenticationProvider>();
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -48,6 +51,14 @@ class _LoginViewState extends State<LoginView> {
       return const AuthenticationPopup();
     }
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if(_authProvider.isLoggedIn){
+      _commenceLoginVerification();
+    }
   }
 
   @override

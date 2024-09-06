@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:voice_authentication/views/login_view.dart';
 
+import '../app_providers/authentication_provider.dart';
+import '../dependency_inject.dart';
+
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
@@ -9,10 +12,12 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final _authProvider = sl<AuthenticationProvider>();
 
-  _commenceLogout(){
+  _commenceLogout() async {
     ///Logout user and clear voice enroll data
     ///
+    await _authProvider.logout();
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginView()), (route) => route.isCurrent);
   }
 

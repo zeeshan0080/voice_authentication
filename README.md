@@ -1,20 +1,5 @@
-# voice_authentication
+# Voice Authentication
 
-Voice authentication using audio event classifier(YAMNET)
+Voice authentication in flutter mobile app using audio event classifier(YAMNET)
 
-Not spending much time on UI so minimal UI, focusing on the model and voice enrollment integration.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Not spending much time on UI hence minimal UI, focusing on the voice authentication integration.
