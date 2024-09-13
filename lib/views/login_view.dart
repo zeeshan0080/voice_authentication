@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../app_providers/authentication_provider.dart';
 import '../dependency_inject.dart';
+import 'home_view.dart';
 import 'voice_enroll_view.dart';
 import 'widgets/popups.dart';
 
@@ -48,7 +49,13 @@ class _LoginViewState extends State<LoginView> {
     barrierLabel: 'enroll notice',
     barrierDismissible: false,
     pageBuilder: (_, __, ___){
-      return const AuthenticationPopup();
+      return AuthenticationPopup(
+        onSuccess: (){
+          _authProvider.login();
+          Navigator.of(context).pop();
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HomeView()), (route) => route.isCurrent);
+        },
+      );
     }
     );
   }
@@ -57,7 +64,7 @@ class _LoginViewState extends State<LoginView> {
   void initState() {
     super.initState();
     if(_authProvider.isLoggedIn){
-      _commenceLoginVerification();
+      Future.microtask(()=> _commenceLoginVerification());
     }
   }
 

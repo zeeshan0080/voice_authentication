@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:record/record.dart';
 
+import '../app_providers/authentication_provider.dart';
+import '../dependency_inject.dart';
 import 'home_view.dart';
 import 'widgets/popups.dart';
 
@@ -11,9 +15,13 @@ class VoiceEnrollView extends StatefulWidget {
 }
 
 class _VoiceEnrollViewState extends State<VoiceEnrollView> {
+  final _authProvider = sl<AuthenticationProvider>();
 
   _onRecord(){
-
+    _authProvider.recordVoiceNote(
+      enroll: true,
+      onSuccess: ()=> _onSuccess()
+    );
   }
 
   _onSuccess() async {
@@ -28,6 +36,7 @@ class _VoiceEnrollViewState extends State<VoiceEnrollView> {
         buttonText: 'Continue',
         canPop: false,
         onTap: (){
+          _authProvider.login();
           Navigator.of(context).pop();
           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const HomeView()), (route) => route.isCurrent);
         },
@@ -57,37 +66,42 @@ class _VoiceEnrollViewState extends State<VoiceEnrollView> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0.0,
-          automaticallyImplyLeading: false,
-          surfaceTintColor: Colors.transparent,
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          title: Text(
-            "Voice Enrollment",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                color: Theme.of(context).primaryColor
+    return Consumer<AuthenticationProvider>(
+      builder: (context, authState, child) {
+        return PopScope(
+          canPop: false,
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              elevation: 0.0,
+              automaticallyImplyLeading: false,
+              surfaceTintColor: Colors.transparent,
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              title: Text(
+                "Voice Enrollment",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).primaryColor
+                ),
+              ),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  authState.recordState == RecordState.record ?
+                  _renderRecording(seconds: authState.recordedDuration) :
+                  _renderStart()
+                ],
+              ),
             ),
           ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _renderStart()
-              //_renderRecording()
-            ],
-          ),
-        ),
-      ),
+        );
+      }
     );
   }
 
@@ -123,7 +137,7 @@ class _VoiceEnrollViewState extends State<VoiceEnrollView> {
                       borderRadius: BorderRadius.circular(5)),
                 ),
                 onPressed: (){
-                  _onSuccess();
+                  _onRecord();
                 },
                 child: const Text(
                   'Record',
@@ -142,7 +156,7 @@ class _VoiceEnrollViewState extends State<VoiceEnrollView> {
     );
   }
 
-  _renderRecording(){
+  _renderRecording({required int seconds}){
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -164,10 +178,10 @@ class _VoiceEnrollViewState extends State<VoiceEnrollView> {
           ],
         ),
         const SizedBox(height: 20),
-        const Text(
-          "00:05",
+        Text(
+          "00:0$seconds",
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
           ),

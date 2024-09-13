@@ -11,4 +11,6 @@ Future<void> inject() async {
   sl.registerLazySingleton<AuthenticationProvider>(
           () => AuthenticationProvider(sf: sharedPreferences));
 
+  sl<AuthenticationProvider>().startService();
+
 }
