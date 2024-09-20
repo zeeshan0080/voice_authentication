@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:path_provider/path_provider.dart';
@@ -25,6 +26,7 @@ class AuthenticationProvider with ChangeNotifier {
 
   late Timer _timer;
   String? voiceNotePath;
+  File? voiceNote;
 
   startService(){
     _recorder = AudioRecorder();
@@ -90,6 +92,7 @@ class AuthenticationProvider with ChangeNotifier {
 
   _stopAndSaveRecording({required Function onSuccess}) async {
     voiceNotePath = await _recorder.stop();
+    voiceNote = File(voiceNotePath!);
     notifyListeners();
     print("Voice note path: $voiceNotePath");
     ///convert and store voice embeddings
@@ -98,6 +101,7 @@ class AuthenticationProvider with ChangeNotifier {
 
   _stopAndValidateRecording({required Function onSuccess}) async {
     voiceNotePath = await _recorder.stop();
+    voiceNote = File(voiceNotePath!);
     notifyListeners();
     print("Voice note path: $voiceNotePath");
     ///validate with stored auth data

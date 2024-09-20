@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:record/record.dart';
+import 'package:tflite_flutter_plus/tflite_flutter_plus.dart';
+//import 'package:tflite_flutter/tflite_flutter.dart';
+//import 'package:tflite_flutter_helper_plus/tflite_flutter_helper_plus.dart';
 
 import '../app_providers/authentication_provider.dart';
 import '../dependency_inject.dart';
@@ -17,10 +22,26 @@ class VoiceEnrollView extends StatefulWidget {
 class _VoiceEnrollViewState extends State<VoiceEnrollView> {
   final _authProvider = sl<AuthenticationProvider>();
 
+  late Interpreter interpreter;
+
   _onRecord(){
     _authProvider.recordVoiceNote(
       enroll: true,
-      onSuccess: ()=> _onSuccess()
+      //onSuccess: ()=> _onSuccess()
+      onSuccess: () async {
+        // Preprocess input as per model requirements (e.g., 16kHz mono audio)
+        //var input = TensorBuffer.createFixedSize([1, 16000], TensorBufferUint8.dynamic().getDataType());
+        var input = [await _authProvider.voiceNote!.readAsBytes()];
+
+
+        //input.loadList(_authProvider.voiceNote!.readAsBytesSync(), shape: [1, 16000]);
+        //var output = TensorBuffer.createFixedSize([1, 256], TensorBufferUint8.dynamic().getDataType());
+
+        // Run inference
+        //interpreter.run(input.buffer, output.buffer);
+        //log("@@: " + output.getIntList().toString());
+
+      }
     );
   }
 
@@ -62,6 +83,16 @@ class _VoiceEnrollViewState extends State<VoiceEnrollView> {
           );
         }
     );
+  }
+
+  @override
+  void initState() {
+    setup();
+    super.initState();
+  }
+
+  setup() async {
+    interpreter = await Interpreter.fromAsset('assets/models/yamnet.tflite');
   }
 
   @override
